@@ -2,11 +2,17 @@ package cosign
 
 import (
 	"context"
+	"crypto/x509"
 	"fmt"
+	"io"
+
+	v1 "github.com/google/go-containerregistry/pkg/v1"
+	"github.com/google/go-containerregistry/pkg/v1/types"
 
 	"github.com/google/go-containerregistry/pkg/name"
-	"github.com/sigstore/cosign/pkg/cosign"
-	"github.com/sigstore/cosign/pkg/oci"
+	"github.com/sigstore/cosign/v2/pkg/cosign"
+	"github.com/sigstore/cosign/v2/pkg/cosign/bundle"
+	"github.com/sigstore/cosign/v2/pkg/oci"
 )
 
 func SetMock(image string, data [][]byte) error {
@@ -60,10 +66,50 @@ func (m *mock) getSignatures(signedImgRef name.Reference) ([]oci.Signature, bool
 }
 
 type sig struct {
-	oci.Signature
+	sg            oci.Signature
 	cosignPayload cosign.SignedPayload
 }
 
 func (s *sig) Payload() ([]byte, error) {
 	return s.cosignPayload.Payload, nil
+}
+
+func (s *sig) Digest() (v1.Hash, error) {
+	return s.sg.Digest()
+}
+func (s *sig) DiffID() (v1.Hash, error) {
+	return s.sg.DiffID()
+}
+func (s *sig) Compressed() (io.ReadCloser, error) {
+	return s.sg.Compressed()
+}
+func (s *sig) Uncompressed() (io.ReadCloser, error) {
+	return s.sg.Uncompressed()
+}
+func (s *sig) Size() (int64, error) {
+	return s.sg.Size()
+}
+func (s *sig) MediaType() (types.MediaType, error) {
+	return s.sg.MediaType()
+}
+func (s *sig) Annotations() (map[string]string, error) {
+	return s.sg.Annotations()
+}
+func (s *sig) Signature() ([]byte, error) {
+	return s.sg.Signature()
+}
+func (s *sig) Base64Signature() (string, error) {
+	return s.sg.Base64Signature()
+}
+func (s *sig) Cert() (*x509.Certificate, error) {
+	return s.sg.Cert()
+}
+func (s *sig) Chain() ([]*x509.Certificate, error) {
+	return s.sg.Chain()
+}
+func (s *sig) Bundle() (*bundle.RekorBundle, error) {
+	return s.sg.Bundle()
+}
+func (s *sig) RFC3161Timestamp() (*bundle.RFC3161Timestamp, error) {
+	return s.sg.RFC3161Timestamp()
 }

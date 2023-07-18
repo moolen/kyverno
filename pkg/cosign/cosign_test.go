@@ -11,9 +11,9 @@ import (
 	"github.com/google/go-containerregistry/pkg/v1/types"
 	"github.com/kyverno/kyverno/pkg/images"
 	"github.com/kyverno/kyverno/pkg/registryclient"
-	"github.com/sigstore/cosign/pkg/cosign"
-	"github.com/sigstore/cosign/pkg/cosign/bundle"
-	"github.com/sigstore/cosign/pkg/oci"
+	"github.com/sigstore/cosign/v2/pkg/cosign"
+	"github.com/sigstore/cosign/v2/pkg/cosign/bundle"
+	"github.com/sigstore/cosign/v2/pkg/oci"
 	"gotest.tools/assert"
 )
 
@@ -184,6 +184,14 @@ func (ts testSignature) Chain() ([]*x509.Certificate, error) {
 }
 
 func (ts testSignature) Bundle() (*bundle.RekorBundle, error) {
+	return nil, fmt.Errorf("not implemented")
+}
+
+func (ts testSignature) RFC3161Timestamp() (*bundle.RFC3161Timestamp, error) {
+	return nil, fmt.Errorf("not implemented")
+}
+
+func (ts testSignature) Signature() ([]byte, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
